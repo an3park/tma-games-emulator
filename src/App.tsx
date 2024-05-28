@@ -28,6 +28,10 @@ const client = new window.telegram.TelegramClient(SESSION, API_ID, API_HASH, {
   connectionRetries: 5,
 }) // Immediately create a client using your application data
 
+if (localStorageSession) {
+  client.connect()
+}
+
 const initialState: IInitialState = { phoneNumber: '', password: '', phoneCode: '' } // Initialize component initial state
 
 async function getHam() {
