@@ -75,6 +75,8 @@ async function getHam() {
 export default function App() {
   const [{ phoneNumber, password, phoneCode }, setAuthInfo] = useState<IInitialState>(initialState)
 
+  const [error, setError] = useState<string | null>(null)
+
   const [url, setUrl] = useState<string | null>(null)
 
   async function sendCodeHandler(): Promise<void> {
@@ -89,16 +91,20 @@ export default function App() {
   }
 
   async function clientStartHandler(): Promise<void> {
-    await client.start({
-      phoneNumber,
-      password: async () => password,
-      phoneCode: async () => phoneCode,
-      onError: () => {},
-    })
-    const saved = client.session.save()
-    localStorage.setItem('session', saved as any) // Save session to local storage
+    try {
+      await client.start({
+        phoneNumber,
+        password: async () => password,
+        phoneCode: async () => phoneCode,
+        onError: () => {},
+      })
+      const saved = client.session.save()
+      localStorage.setItem('session', saved as any) // Save session to local storage
 
-    location.reload()
+      location.reload()
+    } catch (error: any) {
+      setError(error.message || String(error))
+    }
   }
 
   function inputChangeHandler({ target: { name, value } }: BaseSyntheticEvent): void {
@@ -116,15 +122,21 @@ export default function App() {
       <>
         <div>{ip}</div>
         <button
-          onClick={async () => {
-            const url = await getHam()
-            if (url) {
-              setUrl(url)
-            }
+          onClick={() => {
+            getHam()
+              .then((url) => {
+                if (url) {
+                  setUrl(url)
+                }
+              })
+              .catch((err) => {
+                setError(err.message || String(err))
+              })
           }}
         >
           Hamster
         </button>
+        <ResetButton />
       </>
     )
   }
@@ -157,14 +169,20 @@ export default function App() {
 
       <input type="button" value="=login=" onClick={clientStartHandler} />
 
-      <input
-        type="button"
-        value="reset"
-        onClick={() => {
-          localStorage.clear()
-          window.location.reload()
-        }}
-      />
+      <ResetButton />
     </div>
+  )
+}
+
+function ResetButton() {
+  return (
+    <input
+      type="button"
+      value="reset"
+      onClick={() => {
+        localStorage.clear()
+        window.location.reload()
+      }}
+    />
   )
 }
