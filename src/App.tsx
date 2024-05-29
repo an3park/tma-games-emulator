@@ -126,6 +126,7 @@ export default function App() {
       <>
         <div>{ip}</div>
         <button
+          id="hamster"
           onClick={() => {
             getHam()
               .then((url) => {
