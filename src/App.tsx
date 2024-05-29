@@ -80,14 +80,18 @@ export default function App() {
   const [url, setUrl] = useState<string | null>(null)
 
   async function sendCodeHandler(): Promise<void> {
-    await client.connect() // Connecting to the server
-    await client.sendCode(
-      {
-        apiId: API_ID,
-        apiHash: API_HASH,
-      },
-      phoneNumber
-    )
+    try {
+      await client.connect() // Connecting to the server
+      await client.sendCode(
+        {
+          apiId: API_ID,
+          apiHash: API_HASH,
+        },
+        phoneNumber
+      )
+    } catch (error: any) {
+      setError(error.message || String(error))
+    }
   }
 
   async function clientStartHandler(): Promise<void> {
@@ -137,6 +141,7 @@ export default function App() {
           Hamster
         </button>
         <ResetButton />
+        <div style={{ color: 'red' }}>{error}</div>
       </>
     )
   }
@@ -170,6 +175,7 @@ export default function App() {
       <input type="button" value="=login=" onClick={clientStartHandler} />
 
       <ResetButton />
+      <div style={{ color: 'red' }}>{error}</div>
     </div>
   )
 }
