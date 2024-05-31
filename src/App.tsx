@@ -194,7 +194,7 @@ export default function App() {
         onChange={inputChangeHandler}
       />
 
-      <input type="button" value="get code" onClick={sendCodeHandler} />
+      <button onClick={sendCodeHandler}>get code</button>
 
       <input
         type="text"
@@ -204,15 +204,13 @@ export default function App() {
         onChange={inputChangeHandler}
       />
 
-      <input type="button" value="=login=" onClick={clientStartHandler} />
+      <button onClick={clientStartHandler}>login</button>
 
       <hr style={{ width: '100%' }} />
 
       <input type="text" id="session_hash" placeholder="session hash" />
 
-      <input
-        type="button"
-        value="use session"
+      <button
         onClick={() => {
           const sessionHash = (document.getElementById('session_hash') as HTMLInputElement)?.value
           if (sessionHash) {
@@ -220,7 +218,9 @@ export default function App() {
             location.reload()
           }
         }}
-      />
+      >
+        use session
+      </button>
 
       <hr style={{ width: '100%' }} />
 
@@ -233,13 +233,13 @@ export default function App() {
 
 function ResetButton() {
   return (
-    <input
-      type="button"
-      value="reset"
+    <button
       onClick={() => {
         localStorage.clear()
         window.location.reload()
       }}
-    />
+    >
+      reset
+    </button>
   )
 }
