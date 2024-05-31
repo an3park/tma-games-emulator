@@ -38,10 +38,11 @@ async function getHam() {
   let hamster_id: EntityLike | null = null
   let hamster_peer: EntityLike | null = null
 
-  for await (const iterator of client.iterDialogs({ archived: false, limit: 10 })) {
+  for await (const iterator of client.iterDialogs({ archived: false })) {
     if (iterator.entity?.id.toJSNumber() === 7018368922) {
       hamster_id = iterator.entity
       hamster_peer = iterator.dialog.peer
+      break
     }
   }
 
