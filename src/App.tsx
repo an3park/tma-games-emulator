@@ -1,4 +1,4 @@
-import { type BaseSyntheticEvent, useState } from 'react'
+import { useEffect, useState, type BaseSyntheticEvent } from 'react'
 import { EntityLike } from 'telegram/define'
 import { useIP } from './useIP'
 
@@ -27,10 +27,6 @@ const SESSION = new window.telegram.sessions.StringSession(localStorageSession |
 const client = new window.telegram.TelegramClient(SESSION, API_ID, API_HASH, {
   connectionRetries: 5,
 }) // Immediately create a client using your application data
-
-if (localStorageSession) {
-  client.connect()
-}
 
 const initialState: IInitialState = { phoneNumber: '', password: '', phoneCode: '' } // Initialize component initial state
 
@@ -76,9 +72,24 @@ async function getHam() {
 export default function App() {
   const [{ phoneNumber, password, phoneCode }, setAuthInfo] = useState<IInitialState>(initialState)
 
+  const [me, setMe] = useState('')
+
   const [error, setError] = useState<string | null>(null)
 
   const [url, setUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function init() {
+      if (localStorageSession) {
+        await client.connect()
+
+        const me = await client.getMe()
+
+        setMe(`${me.firstName} ${me.lastName} ${me.username}`)
+      }
+    }
+    init()
+  }, [])
 
   async function sendCodeHandler(): Promise<void> {
     try {
@@ -126,6 +137,7 @@ export default function App() {
     return (
       <>
         <div>{ip}</div>
+        <div>{me}</div>
         <button
           id="hamster"
           onClick={() => {
@@ -163,15 +175,7 @@ export default function App() {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 8,
-      }}
-    >
+    <>
       <div>{ip}</div>
 
       <input
@@ -223,7 +227,7 @@ export default function App() {
       <ResetButton />
 
       <div style={{ color: 'red' }}>{error}</div>
-    </div>
+    </>
   )
 }
 
