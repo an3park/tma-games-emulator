@@ -141,6 +141,20 @@ export default function App() {
         >
           Hamster
         </button>
+
+        <hr style={{ width: '100%' }} />
+
+        <button
+          onClick={() => {
+            const sessionHash = localStorage.getItem('session')
+            if (sessionHash) {
+              navigator.clipboard.writeText(sessionHash)
+            }
+          }}
+        >
+          copy session
+        </button>
+
         <ResetButton />
         <div style={{ color: 'red' }}>{error}</div>
       </>
@@ -159,7 +173,13 @@ export default function App() {
     >
       <div>{ip}</div>
 
-      <input type="text" name="phoneNumber" value={phoneNumber} onChange={inputChangeHandler} />
+      <input
+        type="text"
+        name="phoneNumber"
+        placeholder="phone +7999"
+        value={phoneNumber}
+        onChange={inputChangeHandler}
+      />
 
       <input
         type="text"
@@ -171,11 +191,36 @@ export default function App() {
 
       <input type="button" value="get code" onClick={sendCodeHandler} />
 
-      <input type="text" name="phoneCode" value={phoneCode} onChange={inputChangeHandler} />
+      <input
+        type="text"
+        name="phoneCode"
+        placeholder="code"
+        value={phoneCode}
+        onChange={inputChangeHandler}
+      />
 
       <input type="button" value="=login=" onClick={clientStartHandler} />
 
+      <hr style={{ width: '100%' }} />
+
+      <input type="text" id="session_hash" placeholder="session hash" />
+
+      <input
+        type="button"
+        value="use session"
+        onClick={() => {
+          const sessionHash = (document.getElementById('session_hash') as HTMLInputElement)?.value
+          if (sessionHash) {
+            localStorage.setItem('session', sessionHash)
+            location.reload()
+          }
+        }}
+      />
+
+      <hr style={{ width: '100%' }} />
+
       <ResetButton />
+
       <div style={{ color: 'red' }}>{error}</div>
     </div>
   )
