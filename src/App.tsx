@@ -28,6 +28,11 @@ const client = new window.telegram.TelegramClient(SESSION, API_ID, API_HASH, {
   connectionRetries: 5,
 }) // Immediately create a client using your application data
 
+let connected: Promise<any>
+if (localStorageSession) {
+  connected = client.connect()
+}
+
 const initialState: IInitialState = { phoneNumber: '', password: '', phoneCode: '' } // Initialize component initial state
 
 async function getHam() {
@@ -81,7 +86,7 @@ export default function App() {
   useEffect(() => {
     async function init() {
       if (localStorageSession) {
-        await client.connect()
+        await connected
 
         const me = await client.getMe()
 
