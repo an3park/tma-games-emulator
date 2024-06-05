@@ -1,4 +1,4 @@
-import { useEffect, useState, type BaseSyntheticEvent } from 'react'
+import { useEffect, useState } from 'preact/hooks'
 import { EntityLike } from 'telegram/define'
 import { useIP } from './useIP'
 
@@ -66,7 +66,7 @@ async function getHam() {
     // themeParams: new Api.DataJSON({
     //   data: 'thhh',
     // }),
-    platform: 'ios',
+    platform: 'android',
   })
 
   const res = await client.invoke(req)
@@ -128,7 +128,7 @@ export default function App() {
     }
   }
 
-  function inputChangeHandler({ target: { name, value } }: BaseSyntheticEvent): void {
+  function inputChangeHandler({ target: { name, value } }: any): void {
     setAuthInfo((authInfo) => ({ ...authInfo, [name]: value }))
   }
 
@@ -191,6 +191,8 @@ export default function App() {
         onChange={inputChangeHandler}
       />
 
+      <button onClick={sendCodeHandler}>get code</button>
+
       <input
         type="text"
         name="password"
@@ -198,8 +200,6 @@ export default function App() {
         value={password}
         onChange={inputChangeHandler}
       />
-
-      <button onClick={sendCodeHandler}>get code</button>
 
       <input
         type="text"
