@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
 import type { Api } from 'telegram'
-import { EntityLike } from 'telegram/define'
 import { useIP } from './useIP'
 
 const API_ID = 25958552
@@ -50,37 +49,30 @@ async function findCode() {
 }
 
 async function getHam() {
-  let hamster_id: EntityLike | null = null
-  let hamster_peer: EntityLike | null = null
+  let inputEntity: Api.TypeInputPeer | null = null
 
   for await (const iterator of client.iterDialogs({ archived: false })) {
     if (iterator.entity?.id.toJSNumber() === 7018368922) {
-      hamster_id = iterator.entity
-      hamster_peer = iterator.dialog.peer
+      inputEntity = iterator.inputEntity
       break
     }
   }
 
-  if (!hamster_id) {
-    console.error('No bot found')
+  if (!inputEntity) {
+    console.error('No inputEntity found')
     return
   }
 
-  if (!hamster_peer) {
-    console.error('No peer found')
-    return
-  }
+  const referal = (document.getElementById('referal') as HTMLInputElement)?.value
 
-  const req = new window.telegram.Api.messages.RequestWebView({
-    peer: hamster_peer,
-    bot: 'hamster_kombat_bot',
-    fromBotMenu: true,
-    url: 'https://hamsterkombat.io/clicker',
-    // startParam: 'HHHHH',
-    // themeParams: new Api.DataJSON({
-    //   data: 'thhh',
-    // }),
+  const req = new window.telegram.Api.messages.RequestAppWebView({
+    peer: inputEntity,
+    startParam: referal ? `kentId${referal}` : undefined,
     platform: 'android',
+    app: new window.telegram.Api.InputBotAppShortName({
+      botId: inputEntity as any,
+      shortName: 'start',
+    }),
   })
 
   const res = await client.invoke(req)
@@ -163,12 +155,16 @@ export default function App() {
       <>
         <div>{ip}</div>
         <div>{me}</div>
+
+        <input type="text" id="referal id" placeholder="referal" />
+
         <button
           id="hamster"
           onClick={() => {
             getHam()
               .then((url) => {
                 if (url) {
+                  console.log(url)
                   setUrl(url)
                 }
               })
