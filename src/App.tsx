@@ -40,6 +40,15 @@ const initialState: IInitialState = {
   phoneCode: '',
 } // Initialize component initial state
 
+async function findCode() {
+  for await (const iterator of client.iterDialogs({ archived: false })) {
+    if (iterator.title === 'Telegram') {
+      console.log((~~(Date.now() / 1000) - iterator.date) / 60, 'minutes ago')
+      console.log(iterator.message?.message)
+    }
+  }
+}
+
 async function getHam() {
   let hamster_id: EntityLike | null = null
   let hamster_peer: EntityLike | null = null
@@ -196,6 +205,8 @@ export default function App() {
         >
           messages to console
         </button>
+
+        <button onClick={findCode}>find code</button>
 
         <ResetButton />
         <div style={{ color: 'red' }}>{error}</div>
