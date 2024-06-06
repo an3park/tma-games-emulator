@@ -33,7 +33,11 @@ if (localStorageSession) {
   connected = client.connect()
 }
 
-const initialState: IInitialState = { phoneNumber: '', password: '', phoneCode: '' } // Initialize component initial state
+const initialState: IInitialState = {
+  phoneNumber: '',
+  password: '',
+  phoneCode: '',
+} // Initialize component initial state
 
 async function getHam() {
   let hamster_id: EntityLike | null = null
@@ -90,7 +94,7 @@ export default function App() {
 
         const me = await client.getMe()
 
-        setMe(`${me.firstName} ${me.lastName} ${me.username}`)
+        setMe(`${me.firstName} ${me.lastName} ${me.username} ${me.id}`)
       }
     }
     init()
