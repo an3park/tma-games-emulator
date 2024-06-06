@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
+import type { Api } from 'telegram'
 import { EntityLike } from 'telegram/define'
 import { useIP } from './useIP'
 
@@ -76,6 +77,12 @@ async function getHam() {
   const res = await client.invoke(req)
 
   return res.url + themeParams
+}
+
+let messagesEnabled = false
+
+const handleMessage = (message: Api.Message) => {
+  console.log(message.message)
 }
 
 export default function App() {
@@ -175,6 +182,19 @@ export default function App() {
           }}
         >
           copy session
+        </button>
+
+        <button
+          onClick={() => {
+            if (!messagesEnabled) {
+              messagesEnabled = true
+              client.addEventHandler((e) => {
+                handleMessage(e.message)
+              }, new window.telegram.TelegramClient.events.NewMessage({ outgoing: false }))
+            }
+          }}
+        >
+          messages to console
         </button>
 
         <ResetButton />
