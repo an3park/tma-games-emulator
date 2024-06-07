@@ -11,6 +11,8 @@ declare global {
   }
 }
 
+// from web https://app.hamsterkombat.io/clicker/?tgWebAppStartParam=kentId578972208#tgWebAppData=user%3D%257B%2522id%2522%253A323875116%252C%2522first_name%2522%253A%2522Andrey%2522%252C%2522last_name%2522%253A%2522P%2522%252C%2522username%2522%253A%2522an3park%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%257D%26chat_instance%3D-8887301219653098554%26chat_type%3Dprivate%26start_param%3DkentId578972208%26auth_date%3D1717754400%26hash%3Da01264318405ba2d407f84d79c05aed960a71b45c214c9efc62b483200463386&tgWebAppVersion=7.2&tgWebAppPlatform=weba
+
 interface IInitialState {
   phoneNumber: string
   password: string
