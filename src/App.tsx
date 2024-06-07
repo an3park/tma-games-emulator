@@ -156,7 +156,7 @@ export default function App() {
         <div>{ip}</div>
         <div>{me}</div>
 
-        <input type="text" id="referal id" placeholder="referal" />
+        <input type="text" id="referal" placeholder="referal id" />
 
         <button
           id="hamster"
