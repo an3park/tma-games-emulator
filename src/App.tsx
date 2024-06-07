@@ -104,7 +104,7 @@ export default function App() {
 
         const me = await client.getMe()
 
-        setMe(`${me.firstName} ${me.lastName} ${me.username} ${me.id}`)
+        setMe(`${me.firstName} ${me.lastName} ${me.username} ${me.id} ${me.phone}`)
       }
     }
     init()
