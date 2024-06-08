@@ -149,7 +149,7 @@ export default function App() {
   const ip = useIP()
 
   if (url) {
-    return <iframe style={{ width: '393px', height: '728px' }} src={url} />
+    return <iframe style={{ width: '393px', height: '728px', alignSelf: 'flex-start' }} src={url} />
   }
 
   if (localStorageSession) {
