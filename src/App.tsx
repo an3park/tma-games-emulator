@@ -30,10 +30,7 @@ const client = new window.telegram.TelegramClient(SESSION, API_ID, API_HASH, {
   connectionRetries: 5,
 }) // Immediately create a client using your application data
 
-let connected: Promise<any>
-if (localStorageSession) {
-  connected = client.connect()
-}
+const connected = client.connect()
 
 const initialState: IInitialState = {
   phoneNumber: '',
@@ -112,9 +109,10 @@ export default function App() {
     init()
   }, [])
 
-  async function sendCodeHandler(): Promise<void> {
+  async function sendCodeHandler() {
+    console.log('sendCodeHandler')
     try {
-      await client.connect() // Connecting to the server
+      await connected
       await client.sendCode(
         {
           apiId: API_ID,
@@ -127,16 +125,20 @@ export default function App() {
     }
   }
 
-  async function clientStartHandler(): Promise<void> {
+  async function clientStartHandler() {
+    console.log('clientStartHandler')
     try {
       await client.start({
         phoneNumber,
         password: async () => password,
         phoneCode: async () => phoneCode,
-        onError: () => {},
+        onError: (e) => {
+          setError(e.message || String(e))
+          console.error(e)
+        },
       })
       const saved = client.session.save()
-      localStorage.setItem('session', saved as any) // Save session to local storage
+      localStorage.setItem('session', saved as any)
 
       location.reload()
     } catch (error: any) {
@@ -144,7 +146,7 @@ export default function App() {
     }
   }
 
-  function inputChangeHandler({ target: { name, value } }: any): void {
+  function inputChangeHandler({ target: { name, value } }: any) {
     setAuthInfo((authInfo) => ({ ...authInfo, [name]: value }))
   }
 
