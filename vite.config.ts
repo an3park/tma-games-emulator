@@ -6,4 +6,7 @@ export default defineConfig({
   plugins: [preact()],
   // @ts-ignore
   base: process.env.BASE_URL,
+  server: {
+    port: 3000,
+  },
 })
