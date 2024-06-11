@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import type { Api } from 'telegram'
 import { useIP } from './useIP'
+import { sleep } from 'telegram/Helpers'
 
 const API_ID = 25958552
 const API_HASH = '6234132845d2679247afa10e8b1f079e'
@@ -58,8 +59,26 @@ async function getHam() {
   }
 
   if (!inputEntity) {
-    console.error('No inputEntity found')
-    return
+    await client.invoke(
+      new window.telegram.Api.channels.JoinChannel({
+        channel: 'hamster_kombat',
+      })
+    )
+
+    await sleep(5000)
+
+    const { inputChat } = await client.sendMessage('@hamster_kombat_bot', {
+      message: '/start',
+    })
+
+    if (inputChat) {
+      inputEntity = await client.getInputEntity(inputChat)
+    }
+
+    if (!inputEntity) {
+      console.error('No inputEntity found')
+      return
+    }
   }
 
   const referal = (document.getElementById('referal') as HTMLInputElement)?.value
