@@ -104,6 +104,8 @@ export default function App() {
 
         const me = await client.getMe()
 
+        document.title = `${me.firstName || ''} ${me.lastName || ''} ${me.username || ''}`
+
         setMe(`${me.firstName} ${me.lastName} ${me.username} ${me.id} ${me.phone}`)
       }
     }
