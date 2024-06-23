@@ -247,21 +247,19 @@ export default function App() {
     )
   }
 
-  console.log(sms)
-
   return (
     <>
       <div>{ip}</div>
 
+      <input
+        type="text"
+        name="phoneNumber"
+        placeholder="phone +7999"
+        value={phoneNumber}
+        onChange={inputChangeHandler}
+      />
       <div style={{ display: 'flex' }}>
-        <input
-          type="text"
-          name="phoneNumber"
-          placeholder="phone +7999"
-          value={phoneNumber}
-          onChange={inputChangeHandler}
-        />
-        sms:
+        force sms:
         <input
           type="checkbox"
           placeholder="sms"
