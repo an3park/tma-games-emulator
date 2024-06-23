@@ -23,7 +23,9 @@ interface IInitialState {
 const themeParams =
   '&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23212121%22%2C%22button_color%22%3A%22%238774e1%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22hint_color%22%3A%22%23aaaaaa%22%2C%22link_color%22%3A%22%238774e1%22%2C%22secondary_bg_color%22%3A%22%23181818%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%23212121%22%2C%22accent_text_color%22%3A%22%238774e1%22%2C%22section_bg_color%22%3A%22%23212121%22%2C%22section_header_text_color%22%3A%22%238774e1%22%2C%22subtitle_text_color%22%3A%22%23aaaaaa%22%2C%22destructive_text_color%22%3A%22%23ff595a%22%7D'
 
-const localStorageSession = location.hash || localStorage.getItem('session')
+const sessionFromHash = location.hash.length > 10 ? location.hash.slice(1) : null
+
+const localStorageSession = sessionFromHash || localStorage.getItem('session')
 
 const SESSION = new window.telegram.sessions.StringSession(localStorageSession || '') // Get session from local storage
 
