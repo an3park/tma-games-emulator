@@ -18,6 +18,7 @@ interface IInitialState {
   phoneNumber: string
   password: string
   phoneCode: string
+  sms: boolean
 }
 
 const themeParams =
@@ -39,6 +40,7 @@ const initialState: IInitialState = {
   phoneNumber: '',
   password: '',
   phoneCode: '',
+  sms: false,
 } // Initialize component initial state
 
 async function findCode() {
@@ -107,7 +109,8 @@ const handleMessage = (message: Api.Message) => {
 }
 
 export default function App() {
-  const [{ phoneNumber, password, phoneCode }, setAuthInfo] = useState<IInitialState>(initialState)
+  const [{ phoneNumber, password, phoneCode, sms }, setAuthInfo] =
+    useState<IInitialState>(initialState)
 
   const [me, setMe] = useState('')
 
@@ -134,13 +137,15 @@ export default function App() {
     console.log('sendCodeHandler')
     try {
       await connected
-      await client.sendCode(
+      const codeRes = await client.sendCode(
         {
           apiId: API_ID,
           apiHash: API_HASH,
         },
-        phoneNumber
+        phoneNumber,
+        sms
       )
+      console.log(codeRes)
     } catch (error: any) {
       setError(error.message || String(error))
     }
@@ -169,6 +174,10 @@ export default function App() {
 
   function inputChangeHandler({ target: { name, value } }: any) {
     setAuthInfo((authInfo) => ({ ...authInfo, [name]: value }))
+  }
+
+  function chackboxChangeHandler({ target: { name, checked } }: any) {
+    setAuthInfo((authInfo) => ({ ...authInfo, [name]: checked }))
   }
 
   const ip = useIP()
@@ -238,17 +247,29 @@ export default function App() {
     )
   }
 
+  console.log(sms)
+
   return (
     <>
       <div>{ip}</div>
 
-      <input
-        type="text"
-        name="phoneNumber"
-        placeholder="phone +7999"
-        value={phoneNumber}
-        onChange={inputChangeHandler}
-      />
+      <div style={{ display: 'flex' }}>
+        <input
+          type="text"
+          name="phoneNumber"
+          placeholder="phone +7999"
+          value={phoneNumber}
+          onChange={inputChangeHandler}
+        />
+        sms:
+        <input
+          type="checkbox"
+          placeholder="sms"
+          name="sms"
+          checked={sms}
+          onChange={chackboxChangeHandler}
+        />
+      </div>
 
       <button onClick={sendCodeHandler}>get code</button>
 
