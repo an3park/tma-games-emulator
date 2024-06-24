@@ -183,7 +183,20 @@ export default function App() {
   const ip = useIP()
 
   if (url) {
-    return <iframe style={{ width: '393px', height: '728px', alignSelf: 'flex-start' }} src={url} />
+    return (
+      <iframe
+        ref={(el) => {
+          if (el) {
+            const elm = el
+            setTimeout(() => {
+              elm.contentDocument!.documentElement.style.scrollbarWidth = 'none'
+            }, 1000)
+          }
+        }}
+        style={{ width: '393px', height: '728px', alignSelf: 'flex-start' }}
+        src={url}
+      />
+    )
   }
 
   if (localStorageSession) {
